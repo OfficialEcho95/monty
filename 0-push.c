@@ -1,38 +1,37 @@
 #include "monty.h"
-
 /**
- * add_dnodeint - a function that adds a new node at the beginning of
- * a stack_t list.
- *
- * @head: Pointer to the pointer of the head node of the list
- * @n: data to add
- * Return: Address of the new element
- */
-stack_t *add_dnodeint(stack_t **head, const int n)
+ * f_push - add node to the stack
+ * @head: stack head
+ * @counter: line_number
+ * Return: no return
+*/
+void f_push(stack_t **head, unsigned int counter)
 {
-	stack_t *new;
+	int n, j = 0, flag = 0;
 
-	new = malloc(sizeof(stack_t));
-
-	if (new == NULL)
-		return (NULL);
-
-	if (*head == NULL)
+	if (bus.arg)
 	{
-		new->next = NULL;
-		new->prev = NULL;
-		new->n = n;
-		*head = new;
-		return (*head);
-	}
-
-	new->n = n;
-	new->next = *head;
-	new->prev = NULL;
-
-	(*head)->prev = new;
-
-	*head = new;
-
-	return (new);
+		if (bus.arg[0] == '-')
+			j++;
+		for (; bus.arg[j] != '\0'; j++)
+		{
+			if (bus.arg[j] > 57 || bus.arg[j] < 48)
+				flag = 1; }
+		if (flag == 1)
+		{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+			fclose(bus.file);
+			free(bus.content);
+			free_stack(*head);
+			exit(EXIT_FAILURE); }}
+	else
+	{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
+		exit(EXIT_FAILURE); }
+	n = atoi(bus.arg);
+	if (bus.lifi == 0)
+		addnode(head, n);
+	else
+		addqueue(head, n);
 }
